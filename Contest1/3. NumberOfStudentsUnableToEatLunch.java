@@ -1,31 +1,39 @@
 //3. NumberOfStudentsUnableToEatLunch.java
-
-//gave TLE 
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.Stack;
+//https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/description/
 
 class Solution {
     public int countStudents(int[] students, int[] sandwiches) {
-        Queue<Integer> q1 = new ArrayDeque<>();
-        Stack<Integer> s1 = new Stack<>();
+        int len = students.length; // Sandwiches will be the same length
 
-        for (int i = 0; i < students.length; i++) {
-            q1.add(students[i]);
-            s1.add(sandwiches[i]);
+        //STORE THE STUDENTS IN A QUEUE
+        Queue<Integer> studentQueue = new LinkedList<>();
+        //STORE THE SANDWICH IN A STACK
+        Stack<Integer> sandwichStack = new Stack<>();
+        
+        // Add students and sandwiches to the queue and stack
+        for (int i = 0; i < len; i++) {
+            sandwichStack.push(sandwiches[len - i - 1]);
+            //[0,1,0,1] => 1 => 0,1=> 1,0,1 =>0,1,0,1
+            studentQueue.offer(students[i]);
         }
 
-        while (!q1.isEmpty()) {
-            if (q1.peek() == s1.peek()) {
-                q1.poll();
-                s1.pop();
+        // Simulate the lunch process by serving sandwiches 
+        // or sending students to the back of the queue.
+        int lastServed = 0;
+        while (studentQueue.size() > 0 && lastServed < studentQueue.size()) {
+            //Sandwich and students are equal 
+            if (sandwichStack.peek() == studentQueue.peek()) {
+                sandwichStack.pop(); // Serve sandwich
+                studentQueue.poll(); // Student leaves queue
+                lastServed = 0;
+
             } else {
-                q1.add(q1.poll());
+                // Student moves to back of queue
+                studentQueue.add(studentQueue.poll()); 
+                lastServed++;
             }
         }
-
-        return q1.size();
+        // Remaining students in queue are unserved students
+        return studentQueue.size();    
     }
 }
-
-
