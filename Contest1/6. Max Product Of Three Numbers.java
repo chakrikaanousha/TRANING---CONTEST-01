@@ -1,4 +1,4 @@
-//Max Product Of Three Numbers.java
+//6. Max Product Of Three Numbers.java
 //https://leetcode.com/problems/maximum-product-of-three-numbers/description/
 
 
